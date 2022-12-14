@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+  labels:
+    app: hello-world
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+        - name: hello-world
+          image: ghcr.io/irfanhakim-as/hello-world:latest
+          imagePullPolicy: Always
+          resources:
+            requests:
+              cpu: "10m"
+              memory: "10Mi"
+            limits:
+              cpu: "50m"
+              memory: "50Mi"
+          env:
+            - name: myname
+              valueFrom:
+                configMapKeyRef:
+                  name: hello-world-cm
+                  key: name
+            - name: mysecret
+              valueFrom:
+                secretKeyRef:
+                  name: hello-world-secret
+                  key: secret
